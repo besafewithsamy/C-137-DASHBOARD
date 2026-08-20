@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>C-137 DASHBOARD</title>
+  
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+
+  <div id="portal-bg">
+    <div class="portal-glow"></div>
+    <div class="portal-ring ring-1"></div>
+    <div class="portal-ring ring-2"></div>
+    <div class="portal-grid"></div>
+    <canvas id="portal-particles"></canvas>
+  </div>
+
+  <div id="app-container">
+    
+    <aside id="sidebar">
+      <div class="sidebar-header">
+        <h2>[ C-137 ]</h2>
+        <span class="sub-brand">CONSOLE</span>
+      </div>
+      <nav class="sidebar-nav">
+        <ul>
+          <li class="nav-item active" data-target="view-dashboard"><span class="nav-icon">▤</span> Main Console</li>
+          <li class="nav-item" data-target="view-password"><span class="nav-icon">∗</span> Password Checker</li>
+          <li class="nav-item" data-target="view-generator"><span class="nav-icon">↻</span> Password Generator</li>
+          <li class="nav-item" data-target="view-hash"><span class="nav-icon">#</span> Hash Generator</li>
+          <li class="nav-item" data-target="view-encoding"><span class="nav-icon">↔</span> Base64 Encoder</li>
+          <li class="nav-item" data-target="view-ip"><span class="nav-icon">○</span> Network Lookups</li>
+          <li class="nav-item" data-target="view-scanner"><span class="nav-icon">⚡</span> Port Scanner</li>
+          <li class="nav-item" data-target="view-about"><span class="nav-icon">?</span> Diagnostics</li>
+        </ul>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="status-row"><span class="status-indicator"></span> SYSTEM ONLINE</div>
+        <div class="status-row"><span class="status-indicator offline" style="animation: none;"></span> CITADEL: OFFLINE</div>
+        <div class="status-row"><span class="status-indicator"></span> MEESEEKS: STANDBY</div>
+      </div>
+    </aside>
+
+    <main id="main-content">
+      <header class="topbar">
+        <button id="mobile-menu-btn" class="mobile-menu-btn">☰</button>
+        <div style="font-family: var(--font-mono); color: var(--accent-purple); font-size: 0.8rem; letter-spacing: 2px;">
+          DIMENSION: C-137
+        </div>
+        <div class="cmd-hint" onclick="document.dispatchEvent(new KeyboardEvent('keydown', {key: 'k', ctrlKey: true}))">
+          CTRL + K
+        </div>
+      </header>
+
+      <section id="view-dashboard" class="view-section active">
+        <div class="view-container">
+          <div class="section-header">
+            <h1 class="section-title">MAIN CONSOLE</h1>
+            <p>C-137 Dashboard loaded. Don't touch the portal gun.</p>
+          </div>
+          
+          <div class="dashboard-grid">
+            <div class="card">
+              <h3 class="card-title">THREAT LEVEL</h3>
+              <div class="flex-row gap-2" style="font-size: 3rem; font-family: var(--font-mono); font-weight: bold;">
+                <span id="security-score" class="text-cyan">0</span><span style="font-size: 1rem;" class="text-muted">/100</span>
+              </div>
+              <p class="text-muted" style="font-size: 0.8rem;">Calculated from local session data.</p>
+            </div>
+            
+            <div class="card">
+              <h3 class="card-title">ACTIVE MODULES</h3>
+              <div class="flex-row gap-2" style="font-size: 3rem; font-family: var(--font-mono); font-weight: bold;">
+                <span id="active-tools-count" class="text-green">0</span>
+              </div>
+              <p class="text-muted" style="font-size: 0.8rem;">Active tools in this session.</p>
+            </div>
+            
+            <div class="card">
+              <div class="flex-row justify-between" style="margin-bottom: 1.5rem; border-bottom: 1px dashed var(--border-color); padding-bottom: 0.5rem;">
+                <h3 class="card-title" style="margin-bottom: 0; border-bottom: none; padding-bottom: 0;">SYSTEM STATUS</h3>
+                <div class="flex-row" style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--accent-green);">
+                  <span class="status-indicator"></span> ONLINE
+                </div>
+              </div>
+              <div style="font-family: var(--font-mono); font-size: 0.85rem; display: flex; flex-direction: column; gap: 0.75rem;">
+                <div class="flex-row justify-between">
+                  <span class="text-muted">SESSION</span>
+                  <span id="session-uptime" class="text-main">00:00:00</span>
+                </div>
+                <div class="flex-row justify-between">
+                  <span class="text-muted">NETWORK</span>
+                  <span class="text-cyan">STABLE</span>
+                </div>
+                <div class="flex-row justify-between">
+                  <span class="text-muted">SECURITY</span>
+                  <span class="text-green">ACTIVE</span>
+                </div>
+                <div class="flex-row justify-between">
+                  <span class="text-muted">MODULES</span>
+                  <span class="text-purple"><span id="status-modules-count">8</span> ACTIVE</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <h3 class="card-title">THREAT ACTIVITY</h3>
+              <div class="flex-row justify-between" style="font-family: var(--font-mono); font-size: 0.8rem; margin-bottom: 0.5rem;">
+                <span class="text-muted">LAST 24 HOURS</span>
+                <span class="text-cyan">CURRENT: LOW</span>
+              </div>
+              <div style="position: relative; height: 100px; width: 100%; margin-top: 1rem;">
+                <svg viewBox="0 0 400 100" preserveAspectRatio="none" style="width: 100%; height: 100%; overflow: visible; display: block;">
+                  <defs>
+                    <linearGradient id="graph-glow" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stop-color="var(--accent-cyan)" stop-opacity="0.3"></stop>
+                      <stop offset="100%" stop-color="var(--accent-cyan)" stop-opacity="0"></stop>
+                    </linearGradient>
+                  </defs>
+                  <path d="M 0 25 L 400 25 M 0 50 L 400 50 M 0 75 L 400 75" stroke="var(--border-color)" stroke-width="1" fill="none" vector-effect="non-scaling-stroke"></path>
+                  <path id="graph-area" fill="url(#graph-glow)" d="M 0 100 L 0 80 Q 50 60 100 70 T 200 40 T 300 60 T 400 30 L 400 100 Z" style="opacity: 0; animation: fadeArea 2s ease forwards 0.5s;"></path>
+                  <path id="graph-line" fill="none" stroke="var(--accent-cyan)" stroke-width="2" d="M 0 80 Q 50 60 100 70 T 200 40 T 300 60 T 400 30" vector-effect="non-scaling-stroke" stroke-dasharray="1000" stroke-dashoffset="1000" style="animation: drawGraph 2s cubic-bezier(0.4, 0, 0.2, 1) forwards;"></path>
+                </svg>
+                <div class="flex-row justify-between text-muted" style="font-family: var(--font-mono); font-size: 0.65rem; margin-top: 8px;">
+                  <span>00:00</span>
+                  <span>06:00</span>
+                  <span>12:00</span>
+                  <span>18:00</span>
+                  <span class="text-green">NOW</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="padding: 1rem; margin-top: 1rem;">
+            <h3 class="card-title">TERMINAL UPLINK</h3>
+            <div class="terminal-window" style="height: 350px;">
+              <div id="terminal-output" class="terminal-output"></div>
+              <div class="terminal-input-line">
+                <span class="terminal-prompt-prefix">rick@c137:~$</span>
+                <input type="text" id="terminal-input" autocomplete="off" spellcheck="false" autofocus>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top: 1rem;">
+            <h3 class="card-title">ACTIVITY LOG</h3>
+            <div id="activity-list" class="activity-list">
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="view-password" class="view-section">
+        <div class="view-container">
+          <div class="section-header">
+            <h1 class="section-title">PASSWORD STRENGTH</h1>
+            <p>Local password entropy check.</p>
+          </div>
+          <div class="card" style="margin: 0 auto; width: 100%; max-width: 600px;">
+            <div class="input-group">
+              <label for="chk-password-input">Target Password</label>
+              <input type="password" id="chk-password-input" placeholder="Enter password...">
+            </div>
+            <div class="progress-container">
+              <div id="chk-progress" class="progress-bar"></div>
+            </div>
+            <p id="chk-strength-text" class="text-muted" style="margin-top: 1.5rem; font-family: var(--font-mono); font-weight: bold; text-align: center; font-size: 1.2rem;">WAITING FOR INPUT</p>
+            <div style="margin-top: 2rem; padding-top: 1rem; border-top: 1px dashed var(--border-color);">
+              <p class="text-muted" style="font-size: 0.8rem; text-align: center;"><i>Data processed in this dimension only. No network requests made.</i></p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="view-generator" class="view-section">
+        <div class="view-container">
+          <div class="section-header">
+            <h1 class="section-title">PASSWORD GENERATOR</h1>
+            <p>Generate random passwords locally.</p>
+          </div>
+          <div class="card" style="margin: 0 auto; width: 100%; max-width: 600px;">
+            <div class="input-group">
+              <label>Output</label>
+              <div class="flex-row gap-1">
+                <input type="text" id="gen-output" readonly style="color: var(--accent-green); text-shadow: 0 0 5px var(--accent-green-dim); font-size: 1.1rem; text-align: center;">
+                <button id="btn-copy-gen" class="btn btn-primary">COPY</button>
+              </div>
+            </div>
+            
+            <div class="input-group" style="margin-top: 2rem;">
+              <label>Length: <span id="gen-length-val" class="text-cyan">16</span></label>
+              <input type="range" id="gen-length" min="8" max="128" value="16" style="width: 100%; cursor: pointer;">
+            </div>
+
+            <div class="dashboard-grid" style="grid-template-columns: 1fr 1fr; margin-top: 1.5rem; background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 4px;">
+              <div>
+                <label class="checkbox-container"><input type="checkbox" id="gen-uppercase" checked> Uppercase (A-Z)</label>
+                <label class="checkbox-container"><input type="checkbox" id="gen-lowercase" checked> Lowercase (a-z)</label>
+              </div>
+              <div>
+                <label class="checkbox-container"><input type="checkbox" id="gen-numbers" checked> Numbers (0-9)</label>
+                <label class="checkbox-container"><input type="checkbox" id="gen-symbols" checked> Symbols (!@#$)</label>
+              </div>
+            </div>
+
+            <button id="btn-generate" class="btn btn-block btn-primary" style="margin-top: 2rem;">GENERATE NEW</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="view-hash" class="view-section">
+        <div class="view-container">
+          <div class="section-header">
+            <h1 class="section-title">HASH GENERATOR</h1>
+            <p>Generate hashes via Web Crypto API.</p>
+          </div>
+          <div class="card" style="margin: 0 auto; width: 100%; max-width: 700px;">
+            <div class="input-group">
+              <label>Input Data</label>
+              <textarea id="hash-input" placeholder="Enter string..."></textarea>
+            </div>
+            <div class="flex-row justify-between" style="margin-bottom: 2rem;">
+              <button id="btn-clear-hash" class="btn text-error">CLEAR INPUT</button>
+            </div>
+
+            <div class="input-group">
+              <label>SHA-256</label>
+              <div class="flex-row gap-1">
+                <input type="text" id="hash-out-256" readonly style="color: var(--accent-purple);">
+                <button id="btn-copy-256" class="btn">COPY</button>
+              </div>
+            </div>
+            <div class="input-group">
+              <label>SHA-384</label>
+              <div class="flex-row gap-1">
+                <input type="text" id="hash-out-384" readonly style="color: var(--accent-cyan);">
+                <button id="btn-copy-384" class="btn">COPY</button>
+              </div>
+            </div>
+            <div class="input-group">
+              <label>SHA-512</label>
+              <div class="flex-row gap-1">
+                <input type="text" id="hash-out-512" readonly style="color: var(--accent-green);">
+                <button id="btn-copy-512" class="btn">COPY</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="view-encoding" class="view-section">
+        <div class="view-container">
+          <div class="section-header">
+            <h1 class="section-title">BASE64 ENCODER</h1>
+            <p>Base64 encoder and decoder.</p>
+          </div>
+          <div class="dashboard-grid">
+            <div class="card flex-col">
+              <div class="input-group" style="flex-grow: 1;">
+                <label>Data Block 1</label>
+                <textarea id="enc-input" style="height: 250px;" placeholder="Enter text or Base64..."></textarea>
+              </div>
+              <div class="flex-row gap-1" style="margin-top: 1rem;">
+                <button id="btn-encode" class="btn btn-primary" style="flex-grow: 1;">ENCODE -></button>
+                <button id="btn-decode" class="btn" style="flex-grow: 1;">DECODE -></button>
+              </div>
+            </div>
+            
+            <div class="card flex-col">
+              <div class="input-group" style="flex-grow: 1;">
+                <label>Data Block 2 (Result)</label>
+                <textarea id="enc-output" style="height: 250px;" placeholder="Result..."></textarea>
+              </div>
+              <div class="flex-row gap-1" style="margin-top: 1rem;">
+                <button id="btn-swap" class="btn" style="flex-grow: 1;">SWAP</button>
+                <button id="btn-copy-enc" class="btn" style="flex-grow: 1;">COPY</button>
+                <button id="btn-clear-enc" class="btn text-error" style="flex-grow: 1;">CLEAR</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="view-ip" class="view-section">
+        <div class="view-container">
+          <div class="section-header">
+            <h1 class="section-title">NETWORK LOOKUP</h1>
+            <p>Look up IP and domain info.</p>
+          </div>
+          <div class="card" style="margin: 0 auto; width: 100%; max-width: 600px;">
+            <div class="input-group">
+              <label>Target IP or Domain (Leave blank for current host)</label>
+              <div class="flex-row gap-1">
+                <input type="text" id="ip-input" placeholder="e.g. 8.8.8.8 or example.com">
+                <button id="btn-lookup" class="btn btn-primary">LOOKUP</button>
+              </div>
+            </div>
+            <div id="ip-results" class="card" style="margin-top: 2rem; background-color: rgba(0,0,0,0.6); border: 1px dashed var(--accent-cyan); min-height: 150px;">
+              <p class="text-muted" style="text-align: center; margin-top: 2rem;">Waiting for query...</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="view-scanner" class="view-section">
+        <div class="view-container">
+          <div class="section-header">
+            <h1 class="section-title">PORT SCANNER</h1>
+            <p class="text-warning">Simulation mode active. This is just a visual demo.</p>
+          </div>
+          <div class="card" style="margin: 0 auto; width: 100%; max-width: 800px;">
+            <div class="dashboard-grid" style="grid-template-columns: 2fr 1fr; margin-bottom: 1.5rem;">
+              <div class="input-group">
+                <label>Target Node</label>
+                <input type="text" id="scan-target" placeholder="e.g. localhost or 192.168.1.1" value="localhost">
+              </div>
+              <div class="input-group">
+                <label>Port Range</label>
+                <input type="text" id="scan-ports" placeholder="e.g. 1-100" value="1-100">
+              </div>
+            </div>
+            <button id="btn-scan" class="btn btn-primary btn-block">START SCAN</button>
+
+            <div style="margin-top: 2rem;">
+              <label class="text-cyan" style="font-size: 0.85rem; font-family: var(--font-mono);">Output</label>
+              <div id="scan-results" class="terminal-window" style="height: 350px; margin-top: 0.5rem;">
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="view-about" class="view-section">
+        <div class="view-container">
+          <div class="section-header">
+            <h1 class="section-title">SYSTEM DIAGNOSTICS</h1>
+          </div>
+          <div class="card" style="margin: 0 auto; width: 100%; max-width: 800px;">
+            <h3 class="text-purple">C-137 DASHBOARD v2.0.0</h3>
+            <p>Reality: Dimension C-137<br>Status: Nominal</p>
+            <hr style="border: 0; border-top: 1px dashed var(--border-color); margin: 1.5rem 0;">
+            <p>A client-side toolkit for quick, local checks.</p>
+            <p><strong>Privacy:</strong> Everything runs in the browser. No data leaves your machine.</p>
+            <div style="margin-top: 2rem; padding: 1rem; background: rgba(0,0,0,0.4); border: 1px solid var(--border-color); border-radius: 4px;">
+              <iframe src="pages/about.html" style="width: 100%; border: none; min-height: 250px; background: transparent;"></iframe>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <div id="cmd-palette-overlay">
+    <div class="cmd-palette">
+      <div class="cmd-input-wrap">
+        <span>C-137></span>
+        <input type="text" id="cmd-input" placeholder="Search modules..." autocomplete="off">
+      </div>
+      <div id="cmd-results" class="cmd-results">
+      </div>
+    </div>
+  </div>
+
+  <script src="js/utils.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/terminal.js"></script>
+  <script src="js/tools/password.js"></script>
+  <script src="js/tools/generator.js"></script>
+  <script src="js/tools/hash.js"></script>
+  <script src="js/tools/encoding.js"></script>
+  <script src="js/tools/ip.js"></script>
+  <script src="js/tools/scanner.js"></script>
+</body>
+</html>
