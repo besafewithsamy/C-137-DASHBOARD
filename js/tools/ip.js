@@ -13,7 +13,23 @@ document.addEventListener('DOMContentLoaded', () => {
     ipResults.innerHTML = '<p class="text-muted">Fetching data...</p>';
 
     try {
-      const url = query ? `https://ipapi.co/${query}/json/` : 'https://ipapi.co/json/';
+      let resolvedIpAddress = query;
+
+      if (query && /[a-zA-Z]/.test(query)) {
+        const dnsResponse = await fetch(`https://dns.google/resolve?name=${query}&type=A`);
+        if (!dnsResponse.ok) {
+          throw new Error(`DNS HTTP error! status: ${dnsResponse.status}`);
+        }
+        const dnsData = await dnsResponse.json();
+
+        if (dnsData.Answer && dnsData.Answer.length > 0) {
+          resolvedIpAddress = dnsData.Answer[0].data;
+        } else {
+          throw new Error('Domain resolution failed');
+        }
+      }
+
+      const url = resolvedIpAddress ? `https://ipwho.is/${resolvedIpAddress}` : 'https://ipwho.is/';
       const response = await fetch(url);
       
       if (!response.ok) {
@@ -22,29 +38,29 @@ document.addEventListener('DOMContentLoaded', () => {
       
       const data = await response.json();
 
-      if (data.error) {
-        throw new Error(data.reason || 'Lookup failed');
+      if (!data.success) {
+        throw new Error(data.message || 'Lookup failed');
       }
 
       const escape = window.Utils?.escapeHTML || (str => str);
+      const hostname = data.connection?.domain || 'N/A';
+      const isp = data.connection?.isp || 'N/A';
 
       ipResults.innerHTML = `
         <div class="flex-col gap-1">
           <p><strong>IP:</strong> ${escape(data.ip || 'N/A')}</p>
-          <p><strong>Hostname:</strong> ${escape(data.hostname || 'N/A')}</p>
-          <p><strong>City:</strong> ${escape(data.city || 'N/A')}</p>
+          <p><strong>Hostname:</strong> ${escape(hostname)}</p>
+          <p><strong>Country:</strong> ${escape(data.country || 'N/A')} (${escape(data.country_code || '')})</p>
           <p><strong>Region:</strong> ${escape(data.region || 'N/A')}</p>
-          <p><strong>Country:</strong> ${escape(data.country_name || 'N/A')} (${escape(data.country_code || '')})</p>
-          <p><strong>ISP:</strong> ${escape(data.org || 'N/A')}</p>
-          <p><strong>Timezone:</strong> ${escape(data.timezone || 'N/A')}</p>
+          <p><strong>City:</strong> ${escape(data.city || 'N/A')}</p>
+          <p><strong>ISP:</strong> ${escape(isp)}</p>
         </div>
       `;
       if (window.Utils) Utils.logActivity(`Looked up IP/Domain: ${query || 'self'}`);
 
     } catch (e) {
       console.error(e);
-      const escape = window.Utils?.escapeHTML || (str => str);
-      ipResults.innerHTML = `<p class="text-error">Lookup failed: ${escape(e.message)}. Please check input or rate limits.</p>`;
+      ipResults.innerHTML = '<p class="text-error">Target resolution failed. Please verify the address and try again.</p>';
       if (window.Utils) Utils.showToast('Lookup failed', 'error');
     } finally {
       btnLookup.textContent = 'LOOKUP';
