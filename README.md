@@ -16,23 +16,19 @@ The dashboard gives you a set of small, self-contained security tools that you c
 
 **Password Strength Checker** — Type in a password and it scores it on the spot based on length, character variety, and common patterns. Everything stays in memory.
 
-**Password Generator** — Generates passwords using `crypto.getRandomValues()`, which is the browser's cryptographically secure random number generator. You pick the length and character set.
+**Password Generator** : Generates passwords using `crypto.getRandomValues()`, which is the browser's cryptographically secure random number generator. You pick the length and character set.
 
-**Hash Generator** — Takes any text input and produces SHA-256, SHA-384, and SHA-512 hashes via the Web Crypto API. Updates as you type.
+**Hash Generator** : Takes any text input and produces SHA-256, SHA-384, and SHA-512 hashes via the Web Crypto API. Updates as you type.
 
-**Base64 Encoder / Decoder** — Two-panel layout, handles UTF-8 correctly, and lets you swap panels or copy the result with one click.
+**Base64 Encoder / Decoder** : Two-panel layout, handles UTF-8 correctly, and lets you swap panels or copy the result with one click.
 
-**Network Lookup** — Enter an IP address or domain and it pulls basic geolocation and ISP data from a public API. No API key needed.
+**Network Lookup** : Enter an IP address or domain and it pulls basic geolocation and ISP data from a public API. No API key needed.
 
-**Port Scanner** — A simulated port scan. It walks through a port range and shows you which ports would typically be open on a given type of host. Clearly labeled as a simulation — it does not make real network connections.
+**Port Scanner** : A simulated port scan. It walks through a port range and shows you which ports would typically be open on a given type of host. Clearly labeled as a simulation — it does not make real network connections.
 
-**Embedded Terminal** — A simple command-line interface built into the dashboard. Supports `help`, `status`, `neofetch`, `tools`, `open`, and `clear`. You can also use it to navigate between tools.
+**Embedded Terminal** : A simple command-line interface built into the dashboard. Supports `help`, `status`, `neofetch`, `tools`, `open`, and `clear`. You can also use it to navigate between tools.
 
 **Command Palette** — Press `Ctrl + K` from anywhere in the app to search and jump to any tool instantly.
-
----
-
-![Tool view detail](assets/images/pic2.png)
 
 ---
 
