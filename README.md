@@ -2,7 +2,7 @@
 
 A browser-based cybersecurity toolkit with a Rick and Morty-inspired interface. No backend, no frameworks, no data leaving your machine. Everything runs locally using native browser APIs.
 
-This started as a redesign of an older project called Sentinel. The goal was to keep it genuinely useful while giving it a visual identity that actually makes it interesting to open.
+This started as a redesign of an older project called C-137. The goal was to keep it genuinely useful while giving it a visual identity that actually makes it interesting to open.
 
 ---
 
@@ -14,7 +14,7 @@ This started as a redesign of an older project called Sentinel. The goal was to 
 
 The dashboard gives you a set of small, self-contained security tools that you can run without installing anything or sending data anywhere. Here is what is included:
 
-**Password Strength Checker** — Type in a password and it scores it on the spot based on length, character variety, and common patterns. Everything stays in memory.
+**Password Strength Checker** : Type in a password and it scores it on the spot based on length, character variety, and common patterns. Everything stays in memory.
 
 **Password Generator** : Generates passwords using `crypto.getRandomValues()`, which is the browser's cryptographically secure random number generator. You pick the length and character set.
 
@@ -28,7 +28,7 @@ The dashboard gives you a set of small, self-contained security tools that you c
 
 **Embedded Terminal** : A simple command-line interface built into the dashboard. Supports `help`, `status`, `neofetch`, `tools`, `open`, and `clear`. You can also use it to navigate between tools.
 
-**Command Palette** — Press `Ctrl + K` from anywhere in the app to search and jump to any tool instantly.
+**Command Palette** : Press `Ctrl + K` from anywhere in the app to search and jump to any tool instantly.
 
 ---
 
@@ -55,7 +55,7 @@ Then go to `http://localhost:8000`.
 ## Project structure
 
 ```
-sentinel/
+Main/
 ├── index.html
 ├── assets/
 ├── css/
