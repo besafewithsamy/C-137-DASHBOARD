@@ -1,22 +1,23 @@
+
 :root {
-  --bg-dark: #050508;
-  --bg-panel: #0a0a10;
-  --bg-card: #12121a;
-  --bg-input: #1a1a24;
-  --text-main: #e0e0e0;
-  --text-muted: #7b8898;
-  --accent-green: #39ff14;
-  --accent-green-dim: rgba(57, 255, 20, 0.1);
-  --accent-cyan: #00f0ff;
-  --accent-cyan-dim: rgba(0, 240, 255, 0.1);
-  --accent-purple: #b537f2;
-  --accent-purple-dim: rgba(181, 55, 242, 0.15);
-  --accent-yellow: #f0e130;
-  --border-color: #222233;
-  --border-focus: #39ff14;
-  --error: #ff2a2a;
-  --warning: #f0e130;
-  --success: #39ff14;
+  --bg-dark: #F4F6F3;
+  --bg-panel: #FFFFFF;
+  --bg-card: #FFFFFF;
+  --bg-input: #E2E8F0;
+  --text-main: #1A202C;
+  --text-muted: #4A5568;
+  --accent-green: #3B7A77;
+  --accent-green-dim: rgba(59, 122, 119, 0.1);
+  --accent-cyan: #4A8B88;
+  --accent-cyan-dim: rgba(74, 139, 136, 0.1);
+  --accent-purple: #2D5E5B;
+  --accent-purple-dim: rgba(45, 94, 91, 0.15);
+  --accent-yellow: #F6AD55;
+  --border-color: #E2E8F0;
+  --border-focus: #3B7A77;
+  --error: #E53E3E;
+  --warning: #DD6B20;
+  --success: #38A169;
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
   --font-mono: 'Fira Code', 'Courier New', Courier, monospace;
 }
@@ -63,12 +64,12 @@ ul {
   list-style: none;
 }
 
-.text-green { color: var(--accent-green); text-shadow: 0 0 5px var(--accent-green-dim); }
-.text-cyan { color: var(--accent-cyan); text-shadow: 0 0 5px var(--accent-cyan-dim); }
-.text-purple { color: var(--accent-purple); text-shadow: 0 0 5px var(--accent-purple-dim); }
-.text-error { color: var(--error); text-shadow: 0 0 5px rgba(255,0,0,0.3); }
-.text-warning { color: var(--warning); text-shadow: 0 0 5px rgba(240,225,48,0.3); }
-.text-success { color: var(--success); text-shadow: 0 0 5px rgba(57, 255, 20, 0.3); }
+.text-green { color: var(--accent-green); font-weight: 600; }
+.text-cyan { color: var(--accent-cyan); font-weight: 600; }
+.text-purple { color: var(--accent-purple); font-weight: 600; }
+.text-error { color: var(--error); font-weight: 600; }
+.text-warning { color: var(--warning); font-weight: 600; }
+.text-success { color: var(--success); font-weight: 600; }
 .text-muted { color: var(--text-muted); }
 .text-main { color: var(--text-main); }
 
@@ -102,60 +103,38 @@ ul {
   z-index: 0;
   pointer-events: none;
   overflow: hidden;
+  background-color: var(--bg-dark);
 }
 
 .portal-glow {
-  position: absolute;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  width: 90vw; height: 90vw;
-  max-width: 900px; max-height: 900px;
-  background: radial-gradient(circle, var(--accent-cyan-dim) 0%, transparent 60%);
-  filter: blur(50px);
-  opacity: 0.4;
-  animation: pulse-glow 8s infinite alternate ease-in-out;
+  display: none;
 }
 
 .portal-ring {
-  position: absolute;
-  top: 50%; left: 50%;
-  border-radius: 50%;
-  border: 1px solid rgba(0, 240, 255, 0.05);
-  transform: translate(-50%, -50%);
-}
-
-.ring-1 {
-  width: 65vw; height: 65vw;
-  max-width: 650px; max-height: 650px;
-  border-top-color: rgba(181, 55, 242, 0.15);
-  border-bottom-color: rgba(57, 255, 20, 0.1);
-  animation: rotate-ring 40s linear infinite;
-}
-
-.ring-2 {
-  width: 85vw; height: 85vw;
-  max-width: 850px; max-height: 850px;
-  border-left-color: rgba(0, 240, 255, 0.1);
-  border-right-color: rgba(181, 55, 242, 0.1);
-  animation: rotate-ring 60s linear infinite reverse;
+  display: none;
 }
 
 .portal-grid {
   position: absolute;
-  top: 0; left: 0; width: 100%; height: 100%;
+  bottom: -100px;
+  right: -100px;
+  width: 50vw; height: 50vw;
   background-image: 
-    linear-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px);
-  background-size: 60px 60px;
-  opacity: 0.6;
-  mask-image: radial-gradient(circle at center, black 15%, transparent 70%);
-  -webkit-mask-image: radial-gradient(circle at center, black 15%, transparent 70%);
+    linear-gradient(30deg, rgba(200, 200, 200, 0.2) 12%, transparent 12.5%, transparent 87%, rgba(200, 200, 200, 0.2) 87.5%, rgba(200, 200, 200, 0.2)),
+    linear-gradient(150deg, rgba(200, 200, 200, 0.2) 12%, transparent 12.5%, transparent 87%, rgba(200, 200, 200, 0.2) 87.5%, rgba(200, 200, 200, 0.2)),
+    linear-gradient(30deg, rgba(200, 200, 200, 0.2) 12%, transparent 12.5%, transparent 87%, rgba(200, 200, 200, 0.2) 87.5%, rgba(200, 200, 200, 0.2)),
+    linear-gradient(150deg, rgba(200, 200, 200, 0.2) 12%, transparent 12.5%, transparent 87%, rgba(200, 200, 200, 0.2) 87.5%, rgba(200, 200, 200, 0.2)),
+    linear-gradient(60deg, rgba(200, 200, 200, 0.2) 25%, transparent 25.5%, transparent 75%, rgba(200, 200, 200, 0.2) 75%, rgba(200, 200, 200, 0.2)),
+    linear-gradient(60deg, rgba(200, 200, 200, 0.2) 25%, transparent 25.5%, transparent 75%, rgba(200, 200, 200, 0.2) 75%, rgba(200, 200, 200, 0.2));
+  background-size: 80px 140px;
+  background-position: 0 0, 0 0, 40px 70px, 40px 70px, 0 0, 40px 70px;
+  opacity: 0.8;
+  mask-image: radial-gradient(circle at bottom right, black 20%, transparent 60%);
+  -webkit-mask-image: radial-gradient(circle at bottom right, black 20%, transparent 60%);
 }
 
 #portal-particles {
-  position: absolute;
-  top: 0; left: 0; width: 100%; height: 100%;
-  opacity: 0.5;
+  display: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
