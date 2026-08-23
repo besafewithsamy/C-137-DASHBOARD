@@ -2,7 +2,7 @@
 
 A browser-based cybersecurity toolkit with a Rick and Morty-inspired interface. No backend, no frameworks, no data leaving your machine. Everything runs locally using native browser APIs.
 
-This started as a redesign of an older project called Sentinel. The goal was to keep it genuinely useful while giving it a visual identity that actually makes it interesting to open.
+This started as a redesign of an older project called C-137. The goal was to keep it genuinely useful while giving it a visual identity that actually makes it interesting to open.
 
 ---
 
@@ -55,7 +55,7 @@ Then go to `http://localhost:8000`.
 ## Project structure
 
 ```
-sentinel/
+Main/
 ├── index.html
 ├── assets/
 ├── css/
