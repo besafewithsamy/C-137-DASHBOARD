@@ -86,6 +86,7 @@
   flex-direction: column;
 }
 
+
 .user-name {
   font-size: 0.85rem;
   font-weight: bold;
@@ -191,7 +192,7 @@ header.topbar {
   margin-bottom: 1.5rem;
   text-align: center;
 }
-
+/* */
 .section-title {
   font-size: 2rem;
   font-family: var(--font-mono);
