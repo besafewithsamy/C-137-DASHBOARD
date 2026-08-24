@@ -28,22 +28,33 @@
       <nav class="top-nav">
         <ul>
           <li class="nav-item active" data-target="view-dashboard">OVERVIEW</li>
-          <li class="nav-item nav-group-trigger" data-target="view-password">SECURITY TOOLS</li>
-          <li class="nav-item nav-group-trigger" data-target="view-ip">NETWORK</li>
+          <li class="has-dropdown">
+            <span>SECURITY TOOLS ▼</span>
+            <ul class="dropdown-menu">
+              <li class="nav-item" data-target="view-password">Password Check</li>
+              <li class="nav-item" data-target="view-generator">Pass Generator</li>
+              <li class="nav-item" data-target="view-hash">Hash Generator</li>
+              <li class="nav-item" data-target="view-encoding">Base64 Encoder</li>
+              <li class="nav-item" data-target="view-magic">File Identifier</li>
+              <li class="nav-item" data-target="view-phishing">Phishing Sim</li>
+            </ul>
+          </li>
+          <li class="has-dropdown">
+            <span>NETWORK ▼</span>
+            <ul class="dropdown-menu">
+              <li class="nav-item" data-target="view-ip">IP Lookup</li>
+              <li class="nav-item" data-target="view-scanner">Port Scanner</li>
+            </ul>
+          </li>
           <li class="nav-item" data-target="view-terminal">TERMINAL</li>
           <li class="nav-item" data-target="view-logs">LOGS</li>
           <li class="nav-item" data-target="view-about">HELP</li>
-          <!-- Hidden links for command palette to still function smoothly when searching specific tools -->
-          <li class="nav-item hidden" data-target="view-generator"></li>
-          <li class="nav-item hidden" data-target="view-hash"></li>
-          <li class="nav-item hidden" data-target="view-encoding"></li>
-          <li class="nav-item hidden" data-target="view-scanner"></li>
         </ul>
       </nav>
       <div class="user-profile">
         <div class="avatar-icon"></div>
         <div class="user-info">
-          <span class="user-name">Rick Sanchez</span>
+          <span class="user-name">WubbaDubba</span>
           <span class="session-tag">Session: Alpha-7 <span class="live-badge">Live</span></span>
         </div>
       </div>
@@ -109,32 +120,33 @@
               </div>
             </div>
 
-            <div class="card">
-              <h3 class="card-title">THREAT ACTIVITY</h3>
-              <div class="flex-row justify-between" style="font-family: var(--font-mono); font-size: 0.8rem; margin-bottom: 0.5rem;">
-                <span class="text-muted">LAST 24 HOURS</span>
-                <span class="text-cyan">CURRENT: LOW</span>
-              </div>
-              <div style="position: relative; height: 100px; width: 100%; margin-top: 1rem;">
-                <svg viewBox="0 0 400 100" preserveAspectRatio="none" style="width: 100%; height: 100%; overflow: visible; display: block;">
-                  <defs>
-                    <linearGradient id="graph-glow" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stop-color="var(--accent-cyan)" stop-opacity="0.3"></stop>
-                      <stop offset="100%" stop-color="var(--accent-cyan)" stop-opacity="0"></stop>
-                    </linearGradient>
-                  </defs>
-                  <path d="M 0 25 L 400 25 M 0 50 L 400 50 M 0 75 L 400 75" stroke="var(--border-color)" stroke-width="1" fill="none" vector-effect="non-scaling-stroke"></path>
-                  <path id="graph-area" fill="url(#graph-glow)" d="M 0 100 L 0 80 Q 50 60 100 70 T 200 40 T 300 60 T 400 30 L 400 100 Z" style="opacity: 0; animation: fadeArea 2s ease forwards 0.5s;"></path>
-                  <path id="graph-line" fill="none" stroke="var(--accent-cyan)" stroke-width="2" d="M 0 80 Q 50 60 100 70 T 200 40 T 300 60 T 400 30" vector-effect="non-scaling-stroke" stroke-dasharray="1000" stroke-dashoffset="1000" style="animation: drawGraph 2s cubic-bezier(0.4, 0, 0.2, 1) forwards;"></path>
-                </svg>
-                <div class="flex-row justify-between text-muted" style="font-family: var(--font-mono); font-size: 0.65rem; margin-top: 8px;">
-                  <span>00:00</span>
-                  <span>06:00</span>
-                  <span>12:00</span>
-                  <span>18:00</span>
-                  <span class="text-green">NOW</span>
+            <div class="card" style="grid-column: 1 / -1; min-height: 300px;">
+              <div class="flex-row justify-between" style="margin-bottom: 1rem;">
+                <h3 class="card-title" style="margin: 0; border: none; padding: 0;">THREAT ACTIVITY & BANDWIDTH</h3>
+                <div class="flex-row gap-1" id="chart-time-filters" style="font-family: var(--font-mono); font-size: 0.8rem;">
+                  <button class="btn btn-primary" style="padding: 2px 8px;" data-range="1H">1H</button>
+                  <button class="btn" style="padding: 2px 8px;" data-range="24H">24H</button>
+                  <button class="btn" style="padding: 2px 8px;" data-range="7D">7D</button>
+                  <button class="btn" style="padding: 2px 8px;" data-range="30D">30D</button>
                 </div>
               </div>
+              <div style="position: relative; height: 250px; width: 100%;">
+                <canvas id="threat-activity-chart"></canvas>
+              </div>
+            </div>
+          </div>
+          
+          <div class="card" style="margin-top: 1.5rem;">
+            <div class="flex-row justify-between" style="margin-bottom: 1rem; border-bottom: 1px dashed var(--border-color); padding-bottom: 0.5rem;">
+              <h3 class="card-title" style="margin: 0; border: none; padding: 0;">LIVE TELEMETRY</h3>
+              <div class="flex-row gap-1" id="telemetry-filters" style="font-family: var(--font-mono); font-size: 0.75rem;">
+                <label class="checkbox-container" style="margin:0;"><input type="checkbox" value="INFO" checked> INFO</label>
+                <label class="checkbox-container" style="margin:0;"><input type="checkbox" value="WARN" checked> WARN</label>
+                <label class="checkbox-container" style="margin:0;"><input type="checkbox" value="CRITICAL" checked> CRIT</label>
+              </div>
+            </div>
+            <div class="terminal-window" style="height: 150px; padding: 0.5rem 1rem;">
+              <div id="telemetry-output" class="terminal-output" style="margin: 0; font-size: 0.85rem; line-height: 1.4;"></div>
             </div>
           </div>
         </div>
@@ -353,6 +365,113 @@
         </div>
       </section>
 
+    
+      <section id="view-magic" class="view-section">
+        <div class="view-container">
+          <div class="section-header">
+            <h1 class="section-title">FILE IDENTIFIER (MAGIC NUMBERS)</h1>
+            <p>Analyze file headers to detect real file types & spoofing.</p>
+          </div>
+          <div class="card" style="margin: 0 auto; width: 100%; max-width: 800px;">
+            <div id="magic-dropzone" style="border: 2px dashed var(--accent-cyan); padding: 3rem 1rem; text-align: center; border-radius: 8px; cursor: pointer; margin-bottom: 2rem; transition: background 0.3s;">
+              <p style="font-family: var(--font-mono); color: var(--accent-cyan); font-size: 1.2rem; pointer-events: none;">DRAG & DROP FILE HERE</p>
+              <p class="text-muted" style="font-size: 0.9rem; pointer-events: none;">or click to select file</p>
+              <input type="file" id="magic-file-input" style="display: none;">
+            </div>
+            
+            <div id="magic-results" style="display: none; font-family: var(--font-mono);">
+              <div class="flex-row justify-between" style="border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; margin-bottom: 1rem;">
+                <h3 class="card-title" style="margin: 0; border: none; padding: 0;">ANALYSIS RESULTS</h3>
+                <span id="magic-status-badge" style="padding: 2px 8px; border-radius: 12px; font-size: 0.8rem; font-weight: bold;"></span>
+              </div>
+              
+              <div class="dashboard-grid" style="grid-template-columns: 1fr 1fr; margin-bottom: 1.5rem;">
+                <div>
+                  <p class="text-muted" style="font-size: 0.8rem; margin-bottom: 0.2rem;">CLAIMED EXTENSION</p>
+                  <p id="magic-ext" style="font-size: 1.1rem; color: var(--text-main);">-</p>
+                </div>
+                <div>
+                  <p class="text-muted" style="font-size: 0.8rem; margin-bottom: 0.2rem;">DETECTED TYPE (MAGIC BYTES)</p>
+                  <p id="magic-detected" style="font-size: 1.1rem; color: var(--accent-yellow);">-</p>
+                </div>
+                <div>
+                  <p class="text-muted" style="font-size: 0.8rem; margin-bottom: 0.2rem;">FILE SIZE</p>
+                  <p id="magic-size" style="font-size: 1.1rem; color: var(--text-main);">-</p>
+                </div>
+                <div>
+                  <p class="text-muted" style="font-size: 0.8rem; margin-bottom: 0.2rem;">ENTROPY</p>
+                  <p id="magic-entropy" style="font-size: 1.1rem; color: var(--text-main);">-</p>
+                </div>
+              </div>
+              
+              <p class="text-muted" style="font-size: 0.8rem; margin-bottom: 0.2rem;">HEX HEADER PREVIEW</p>
+              <div class="terminal-window" style="padding: 1rem; margin-bottom: 1rem;">
+                <div id="magic-hex" class="terminal-output" style="margin: 0; min-height: 80px; word-break: break-all; color: var(--accent-cyan); font-size: 1rem; line-height: 1.6;"></div>
+              </div>
+              
+              <div id="magic-warning" style="display: none; background: rgba(255, 51, 102, 0.1); border: 1px solid var(--error); padding: 1rem; border-radius: 4px;">
+                <p class="text-error" style="margin: 0; font-weight: bold; display: flex; align-items: center; gap: 8px;">
+                  ⚠️ SPOOF WARNING: File extension does not match magic bytes.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="view-phishing" class="view-section">
+        <div class="view-container">
+          <div class="section-header">
+            <h1 class="section-title">PHISHING SIMULATOR & ANALYZER</h1>
+            <p>Evaluate emails and test your phishing detection skills.</p>
+          </div>
+          <div class="dashboard-grid">
+            
+            <div class="card flex-col">
+              <h3 class="card-title">INTERACTIVE SCENARIO</h3>
+              <div id="phishing-scenario-container" style="flex-grow: 1; display: flex; flex-direction: column;">
+                <div style="background: white; color: black; border-radius: 4px; padding: 1rem; margin-bottom: 1.5rem; font-family: sans-serif; position: relative;">
+                  <div style="border-bottom: 1px solid #eee; padding-bottom: 0.5rem; margin-bottom: 1rem;">
+                    <p style="margin: 0 0 0.5rem 0; font-size: 0.9rem;"><strong>From:</strong> <span id="phishing-from" style="color: #555;">Support &lt;support@paypal-security.com&gt;</span></p>
+                    <p style="margin: 0 0 0.5rem 0; font-size: 0.9rem;"><strong>To:</strong> user@company.com</p>
+                    <p style="margin: 0; font-size: 1.1rem; font-weight: bold;">Subject: <span id="phishing-subject">URGENT: Your account has been suspended</span></p>
+                  </div>
+                  <div id="phishing-body" style="font-size: 0.95rem; line-height: 1.5;">
+                    <p>Dear Customer,</p>
+                    <p>We detected unusual activity on your account. To prevent permanent suspension, please verify your identity immediately.</p>
+                    <p><a href="#" id="phishing-link" title="http://paypal.login-update.com/auth" style="color: #005ea6; text-decoration: none; font-weight: bold;">Verify Account Now</a></p>
+                    <p>Thanks,<br>Security Team</p>
+                  </div>
+                </div>
+                
+                <div class="flex-row gap-1">
+                  <button id="btn-phishing-legit" class="btn btn-primary" style="flex-grow: 1; background-color: var(--accent-green); border-color: var(--accent-green);">LEGITIMATE</button>
+                  <button id="btn-phishing-malicious" class="btn btn-primary" style="flex-grow: 1; background-color: var(--error); border-color: var(--error);">PHISHING</button>
+                </div>
+                <button id="btn-phishing-next" class="btn btn-block" style="margin-top: 1rem; display: none;">NEXT SCENARIO</button>
+              </div>
+              
+              <div id="phishing-feedback" style="display: none; margin-top: 1rem; padding: 1rem; background: var(--bg-input); border: 1px solid var(--border-color); border-radius: 4px; font-family: var(--font-mono); font-size: 0.9rem;">
+              </div>
+            </div>
+
+            <div class="card flex-col">
+              <h3 class="card-title">HEADER & RED-FLAG ANALYZER</h3>
+              <p class="text-muted" style="font-size: 0.85rem; margin-bottom: 1rem;">Paste raw email headers or body to detect indicators.</p>
+              <textarea id="phishing-analyzer-input" style="flex-grow: 1; min-height: 200px; margin-bottom: 1rem; font-family: var(--font-mono); font-size: 0.85rem;" placeholder="Received: from mail.suspicious.com (192.168.1.100)..."></textarea>
+              <button id="btn-phishing-analyze" class="btn btn-primary btn-block">ANALYZE CONTENT</button>
+              
+              <div id="phishing-analysis-results" style="margin-top: 1rem; display: none;">
+                <h4 style="color: var(--accent-cyan); font-size: 0.9rem; margin-bottom: 0.5rem; font-family: var(--font-mono);">FINDINGS</h4>
+                <ul id="phishing-findings-list" style="list-style: none; padding: 0; margin: 0; font-family: var(--font-mono); font-size: 0.85rem; display: flex; flex-direction: column; gap: 0.5rem;">
+                </ul>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+      </section>
+
     </main>
   </div>
 
@@ -367,8 +486,10 @@
     </div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="js/utils.js"></script>
   <script src="js/app.js"></script>
+  <script src="js/dashboard.js"></script>
   <script src="js/terminal.js"></script>
   <script src="js/tools/password.js"></script>
   <script src="js/tools/generator.js"></script>
@@ -376,5 +497,8 @@
   <script src="js/tools/encoding.js"></script>
   <script src="js/tools/ip.js"></script>
   <script src="js/tools/scanner.js"></script>
+  <script src="js/tools/magic.js"></script>
+  <script src="js/tools/phishing.js"></script>
 </body>
+
 </html>

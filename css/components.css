@@ -452,3 +452,79 @@ input[type="range"]::-webkit-slider-runnable-track {
   background: var(--border-color);
   border-radius: 2px;
 }
+
+.has-dropdown {
+  position: relative;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.has-dropdown > span {
+  display: block;
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 0.9rem;
+  user-select: none;
+  transition: color 0.2s;
+}
+
+.has-dropdown:hover > span {
+  color: var(--text-main);
+}
+
+.has-dropdown:hover {
+  background-color: var(--bg-input);
+}
+
+.has-dropdown.active > span {
+  color: var(--accent-cyan);
+}
+
+.has-dropdown.active {
+  background-color: var(--accent-cyan-dim);
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  background-color: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  min-width: 200px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(8px);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  z-index: 1000;
+  padding: 0.4rem 0;
+}
+
+.has-dropdown:hover .dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.dropdown-menu .nav-item {
+  display: block;
+  padding: 0.6rem 1.2rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background-color 0.15s, color 0.15s;
+  border-radius: 0;
+}
+
+.dropdown-menu .nav-item:hover {
+  background-color: var(--bg-input);
+  color: var(--accent-cyan);
+}
+
+.dropdown-menu .nav-item.active {
+  color: var(--accent-cyan);
+  background-color: var(--accent-cyan-dim);
+}
+
