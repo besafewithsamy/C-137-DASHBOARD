@@ -51,11 +51,19 @@
           <li class="nav-item" data-target="view-about">HELP</li>
         </ul>
       </nav>
-      <div class="user-profile">
-        <div class="avatar-icon"></div>
-        <div class="user-info">
-          <span class="user-name">WubbaDubba</span>
-          <span class="session-tag">Session: Alpha-7 <span class="live-badge">Live</span></span>
+      <div style="display: flex; align-items: center; gap: 15px;">
+        <div style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--accent-cyan); display: flex; flex-direction: column; align-items: flex-end; margin-right: 10px;">
+          <span>SYNC STATUS</span>
+          <span style="color: var(--accent-green); font-weight: bold;">99.98% C-137</span>
+        </div>
+        <button id="btn-holo-toggle" class="btn btn-icon glitch-hover" title="Holo Mode" style="font-size: 1.2rem; color: var(--accent-cyan);">📺</button>
+        <button id="btn-audio-toggle" class="btn btn-icon glitch-hover" title="Mute Audio" style="font-size: 1.2rem; color: var(--accent-cyan);">🔊</button>
+        <div class="user-profile glitch-hover">
+          <div class="avatar-icon"></div>
+          <div class="user-info">
+            <span class="user-name">Rick Sanchez</span>
+            <span class="session-tag">Session: Alpha-7 <span class="live-badge">Live</span></span>
+          </div>
         </div>
       </div>
     </header>
@@ -116,6 +124,12 @@
                 <div class="flex-row justify-between">
                   <span class="text-muted">MODULES</span>
                   <span class="text-purple"><span id="status-modules-count">8</span> ACTIVE</span>
+                </div>
+                <div class="flex-row justify-between mt-2 pt-2" style="border-top: 1px dashed var(--border-color);">
+                  <span class="text-muted" style="font-size: 0.75rem;">MICROVERSE BATTERY</span>
+                  <div style="width: 80px; height: 10px; background: var(--bg-dark); border: 1px solid var(--border-color); border-radius: 4px; overflow: hidden; position: relative;">
+                    <div id="battery-level" style="width: 85%; height: 100%; background: var(--accent-green); box-shadow: 0 0 8px var(--accent-green); transition: width 0.5s;"></div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -487,6 +501,7 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="js/audio.js"></script>
   <script src="js/utils.js"></script>
   <script src="js/app.js"></script>
   <script src="js/dashboard.js"></script>
@@ -500,5 +515,4 @@
   <script src="js/tools/magic.js"></script>
   <script src="js/tools/phishing.js"></script>
 </body>
-
 </html>

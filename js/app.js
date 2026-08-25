@@ -205,13 +205,17 @@ const initPortalParticles = () => {
   window.addEventListener('resize', resize);
   resize();
 
-  for(let i=0; i<40; i++) {
+  const centerX = width / 2;
+  const centerY = height / 2;
+
+  for(let i=0; i<150; i++) {
     particles.push({
       x: Math.random() * width,
       y: Math.random() * height,
-      size: Math.random() * 2 + 0.5,
-      speedX: (Math.random() - 0.5) * 0.5,
-      speedY: (Math.random() - 0.5) * 0.5,
+      size: Math.random() * 2 + 1,
+      angle: Math.random() * PI2,
+      radius: Math.random() * Math.max(width, height),
+      speed: Math.random() * 0.02 + 0.005,
       opacity: Math.random() * 0.5 + 0.1
     });
   }
@@ -219,19 +223,25 @@ const initPortalParticles = () => {
   const isReduced = window.matchMedia(`(prefers-reduced-motion: reduce)`).matches;
 
   const animate = () => {
-    ctx.clearRect(0, 0, width, height);
+    ctx.fillStyle = 'rgba(26, 32, 44, 0.1)'; 
+    ctx.fillRect(0, 0, width, height);
+
+    const cX = width / 2;
+    const cY = height / 2;
 
     particles.forEach(p => {
       if (!isReduced) {
-        p.x += p.speedX;
-        p.y += p.speedY;
-        if(p.x < 0) p.x = width;
-        if(p.x > width) p.x = 0;
-        if(p.y < 0) p.y = height;
-        if(p.y > height) p.y = 0;
+        p.angle += p.speed;
+        p.radius -= 0.5;
+        if (p.radius < 0) {
+          p.radius = Math.max(width, height) / 1.2;
+          p.angle = Math.random() * PI2;
+        }
+        p.x = cX + Math.cos(p.angle) * p.radius;
+        p.y = cY + Math.sin(p.angle) * p.radius;
       }
 
-      ctx.fillStyle = `rgba(0, 240, 255, ${p.opacity})`;
+      ctx.fillStyle = `rgba(0, 255, 135, ${p.opacity})`;
       ctx.beginPath();
       ctx.arc(p.x, p.y, p.size, 0, PI2);
       ctx.fill();
@@ -240,6 +250,7 @@ const initPortalParticles = () => {
     if (!isReduced) requestAnimationFrame(animate);
   };
 
+  canvas.style.display = 'block';
   animate();
 };
 
@@ -257,7 +268,47 @@ const initSessionTimer = () => {
   }, 1000);
 };
 
+const initBattery = () => {
+  const batteryLevel = document.getElementById('battery-level');
+  if (!batteryLevel) return;
+  
+  setInterval(() => {
+    const min = 75;
+    const max = 98;
+    const val = Math.floor(Math.random() * (max - min + 1)) + min;
+    batteryLevel.style.width = `${val}%`;
+    
+    if (val < 80) batteryLevel.style.background = 'var(--accent-yellow)';
+    else batteryLevel.style.background = 'var(--accent-green)';
+    batteryLevel.style.boxShadow = `0 0 8px ${batteryLevel.style.background}`;
+  }, 3000);
+};
+
+const initToggles = () => {
+  const holoBtn = document.getElementById('btn-holo-toggle');
+  const audioBtn = document.getElementById('btn-audio-toggle');
+  
+  if (holoBtn) {
+    holoBtn.addEventListener('click', () => {
+      document.body.classList.toggle('scanlines');
+      if (window.AudioEngine) window.AudioEngine.play('bleep');
+    });
+  }
+  
+  if (audioBtn) {
+    audioBtn.addEventListener('click', () => {
+      if (window.AudioEngine) {
+        const isMuted = window.AudioEngine.toggleMute();
+        audioBtn.textContent = isMuted ? '🔇' : '🔊';
+        audioBtn.title = isMuted ? 'Unmute Audio' : 'Mute Audio';
+      }
+    });
+  }
+};
+
 document.addEventListener('DOMContentLoaded', () => {
   initPortalParticles();
   initSessionTimer();
+  initBattery();
+  initToggles();
 });

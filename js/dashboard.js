@@ -16,8 +16,8 @@ document.addEventListener('DOMContentLoaded', () => {
         {
           label: 'Threat Activity',
           data: [10, 50, 20, 90, 40, 60, 30],
-          borderColor: '#00F0FF',
-          backgroundColor: 'rgba(0, 240, 255, 0.1)',
+          borderColor: '#00FF87',
+          backgroundColor: 'rgba(0, 255, 135, 0.1)',
           borderWidth: 2,
           fill: true,
           tension: 0.4
@@ -25,10 +25,11 @@ document.addEventListener('DOMContentLoaded', () => {
         {
           label: 'Bandwidth (MB/s)',
           data: [5, 15, 10, 25, 20, 15, 30],
-          borderColor: '#FF3366',
-          backgroundColor: 'transparent',
+          borderColor: '#00E5FF',
+          backgroundColor: 'rgba(0, 229, 255, 0.1)',
           borderWidth: 2,
           borderDash: [5, 5],
+          fill: true,
           tension: 0.4
         }
       ]
@@ -65,6 +66,8 @@ document.addEventListener('DOMContentLoaded', () => {
       timeFilters.forEach(b => b.classList.remove('btn-primary'));
       e.target.classList.add('btn-primary');
       
+      if (window.AudioEngine) window.AudioEngine.play('bleep');
+
       if (!threatChart) return;
       const range = e.target.dataset.range;
       let newThreat = [];
@@ -126,10 +129,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  document.addEventListener('activityLogUpdated', updateDynamicScore);
-  setInterval(updateDynamicScore, 5000);
-  setTimeout(updateDynamicScore, 1000);
-
   const telemetryOutput = document.getElementById('telemetry-output');
   const filterCheckboxes = document.querySelectorAll('#telemetry-filters input');
   
@@ -139,45 +138,53 @@ document.addEventListener('DOMContentLoaded', () => {
       .map(cb => cb.value);
   };
 
-  const addTelemetryLog = () => {
-    if (!telemetryOutput) return;
-    
-    const levels = ['INFO', 'WARN', 'CRITICAL'];
-    const selectedLevel = levels[Math.floor(Math.random() * levels.length)];
-    
-    const activeLevels = getActiveLevels();
-    if (!activeLevels.includes(selectedLevel)) {
-      setTimeout(addTelemetryLog, Math.random() * 2000 + 1000);
-      return;
+  document.addEventListener('activityLogUpdated', () => {
+    updateDynamicScore();
+
+    if (threatChart) {
+      const tData = threatChart.data.datasets[0].data;
+      const bData = threatChart.data.datasets[1].data;
+      
+      tData.shift();
+      bData.shift();
+      
+      tData.push(Math.floor(Math.random() * 60) + 40);
+      bData.push(Math.floor(Math.random() * 40) + 20);
+      
+      threatChart.update();
     }
-    
-    const msgs = {
-      INFO: ['Subsystem nominal.', 'Heartbeat received.', 'Routine scan complete.', 'Port 443 active.', 'User authenticated.'],
-      WARN: ['High latency detected.', 'Unrecognized packet dropped.', 'Bandwidth spike.', 'Failed login attempt.'],
-      CRITICAL: ['Intrusion attempt blocked!', 'Firewall rule violated.', 'DDoS signature matched.', 'Memory threshold exceeded!']
-    };
-    
-    const msg = msgs[selectedLevel][Math.floor(Math.random() * msgs[selectedLevel].length)];
-    const time = new Date().toISOString().split('T')[1].slice(0, 8);
-    
-    let color = 'var(--text-main)';
-    if (selectedLevel === 'WARN') color = 'var(--accent-yellow)';
-    if (selectedLevel === 'CRITICAL') color = 'var(--error)';
-    
-    const div = document.createElement('div');
-    div.style.marginBottom = '4px';
-    div.innerHTML = \`<span style="color: var(--text-muted);">[\${time}]</span> <strong style="color: \${color};">[\${selectedLevel}]</strong> \${msg}\`;
-    
-    telemetryOutput.appendChild(div);
-    if (telemetryOutput.childNodes.length > 20) {
-      telemetryOutput.removeChild(telemetryOutput.firstChild);
+
+    const logs = window.Utils && window.Utils.Storage ? window.Utils.Storage.get('c137_activity') || [] : [];
+    if (logs.length > 0 && telemetryOutput) {
+      const latestLog = logs[0];
+      let level = 'INFO';
+      let color = 'var(--text-main)';
+      
+      const actionLower = latestLog.action.toLowerCase();
+      if (actionLower.includes('phishing') || actionLower.includes('incorrect') || actionLower.includes('error') || actionLower.includes('fail')) {
+        level = 'WARN';
+        color = 'var(--accent-yellow)';
+      }
+      if (actionLower.includes('scan') || actionLower.includes('critical') || actionLower.includes('malicious')) {
+        level = 'CRITICAL';
+        color = 'var(--error)';
+        if (window.AudioEngine) {
+            window.AudioEngine.play('beep');
+        }
+      }
+
+      const activeLevels = getActiveLevels();
+      if (activeLevels.includes(level)) {
+        const div = document.createElement('div');
+        div.style.marginBottom = '4px';
+        div.innerHTML = `<span style="color: var(--text-muted);">${latestLog.time}</span> <strong style="color: ${color};">[${level}]</strong> ${latestLog.action}`;
+        
+        telemetryOutput.appendChild(div);
+        if (telemetryOutput.childNodes.length > 20) {
+          telemetryOutput.removeChild(telemetryOutput.firstChild);
+        }
+        telemetryOutput.scrollTop = telemetryOutput.scrollHeight;
+      }
     }
-    telemetryOutput.scrollTop = telemetryOutput.scrollHeight;
-    
-    setTimeout(addTelemetryLog, Math.random() * 3000 + 1000);
-  };
-  
-  if (telemetryOutput) {
-    setTimeout(addTelemetryLog, 1000);
-  }
+  });
 });
