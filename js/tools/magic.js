@@ -101,12 +101,9 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       
       resultsDiv.style.display = 'block';
-      
-      if (window.Utils && window.Utils.Storage) {
-        const logs = window.Utils.Storage.get('c137_activity') || [];
-        logs.unshift({ time: new Date().toLocaleTimeString(), action: `File ID: Analysed ${file.name}` });
-        window.Utils.Storage.set('c137_activity', logs);
-        document.dispatchEvent(new Event('activityLogUpdated'));
+
+      if (window.Utils && window.Utils.logActivity) {
+        Utils.logActivity(`File ID: Analysed ${file.name}`);
       }
     };
     reader.readAsArrayBuffer(file);

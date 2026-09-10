@@ -1,16 +1,24 @@
 document.addEventListener('DOMContentLoaded', () => {
   const viewSections = document.querySelectorAll('.view-section');
-  const sidebar = document.getElementById('sidebar');
   const activityList = document.getElementById('activity-list');
   const activeToolsCount = document.getElementById('active-tools-count');
   const statusModulesCount = document.getElementById('status-modules-count');
   const cmdOverlay = document.getElementById('cmd-palette-overlay');
   const cmdInput = document.getElementById('cmd-input');
   const cmdResults = document.getElementById('cmd-results');
-  const totalViews = viewSections.length;
+  const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+  const topNav = document.querySelector('.top-nav');
 
   const validViewIds = new Set();
   viewSections.forEach(s => validViewIds.add(s.id));
+
+  const closeAllDropdowns = () => {
+    document.querySelectorAll('.top-nav .has-dropdown').forEach(p => {
+      p.classList.remove('open');
+      const trigger = p.querySelector('span[role="button"]');
+      if (trigger) trigger.setAttribute('aria-expanded', 'false');
+    });
+  };
 
   const switchView = (targetId) => {
     if (!targetId || !validViewIds.has(targetId)) {
@@ -34,32 +42,64 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
-    if (sidebar) sidebar.classList.remove('open');
+    if (mobileMenuBtn) {
+      topNav.classList.remove('open');
+      mobileMenuBtn.setAttribute('aria-expanded', 'false');
+    }
+    closeAllDropdowns();
+
+    if (targetId === 'view-terminal') {
+      const termInput = document.getElementById('terminal-input');
+      if (termInput) termInput.focus();
+    }
+
+    history.replaceState(null, '', `#${targetId.replace('view-', '')}`);
+
+    const mainContent = document.getElementById('main-content');
+    if (mainContent) mainContent.scrollTop = 0;
   };
 
-  const topLevelNavItems = document.querySelectorAll('.top-nav > ul > .nav-item[data-target]');
-  topLevelNavItems.forEach(item => {
+  document.querySelectorAll('.top-nav .nav-item[data-target]').forEach(item => {
     item.addEventListener('click', (e) => {
       e.stopPropagation();
       switchView(item.dataset.target);
     });
   });
 
-  const dropdownNavItems = document.querySelectorAll('.top-nav .dropdown-menu .nav-item');
-  dropdownNavItems.forEach(item => {
-    item.addEventListener('click', (e) => {
+  document.querySelectorAll('.top-nav .has-dropdown > span').forEach(trigger => {
+    const toggleDropdown = (e) => {
       e.preventDefault();
       e.stopPropagation();
-      const target = item.dataset.target;
-      if (target) {
-        switchView(target);
+      const parent = trigger.closest('.has-dropdown');
+      const isOpen = parent.classList.contains('open');
+      closeAllDropdowns();
+      if (!isOpen) {
+        parent.classList.add('open');
+        trigger.setAttribute('aria-expanded', 'true');
+      }
+    };
+
+    trigger.addEventListener('click', toggleDropdown);
+    trigger.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        toggleDropdown(e);
       }
     });
   });
 
-  const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-  if (mobileMenuBtn) {
-    mobileMenuBtn.addEventListener('click', () => sidebar.classList.toggle('open'));
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.has-dropdown')) closeAllDropdowns();
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeAllDropdowns();
+  });
+
+  if (mobileMenuBtn && topNav) {
+    mobileMenuBtn.addEventListener('click', () => {
+      const isOpen = topNav.classList.toggle('open');
+      mobileMenuBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    });
   }
 
   window.App = {
@@ -82,8 +122,12 @@ document.addEventListener('DOMContentLoaded', () => {
         activityList.appendChild(div);
       });
 
-      if (activeToolsCount) activeToolsCount.textContent = totalViews;
-      if (statusModulesCount) statusModulesCount.textContent = totalViews;
+      const usedTools = new Set(
+        logs.map(log => (log.action || '').split(':')[0]).filter(Boolean)
+      ).size;
+
+      if (activeToolsCount) activeToolsCount.textContent = usedTools;
+      if (statusModulesCount) statusModulesCount.textContent = usedTools;
     }
   };
 
@@ -183,76 +227,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  window.App.updateDashboard();
-});
-
-const initPortalParticles = () => {
-  const canvas = document.getElementById('portal-particles');
-  if (!canvas) return;
-  const ctx = canvas.getContext('2d');
-
-  let width, height;
-  const particles = [];
-  const PI2 = Math.PI * 2;
-
-  const resize = () => {
-    width = window.innerWidth;
-    height = window.innerHeight;
-    canvas.width = width;
-    canvas.height = height;
-  };
-
-  window.addEventListener('resize', resize);
-  resize();
-
-  const centerX = width / 2;
-  const centerY = height / 2;
-
-  for(let i=0; i<150; i++) {
-    particles.push({
-      x: Math.random() * width,
-      y: Math.random() * height,
-      size: Math.random() * 2 + 1,
-      angle: Math.random() * PI2,
-      radius: Math.random() * Math.max(width, height),
-      speed: Math.random() * 0.02 + 0.005,
-      opacity: Math.random() * 0.5 + 0.1
-    });
+  const initialHash = window.location.hash.replace('#', '');
+  if (initialHash && validViewIds.has(`view-${initialHash}`)) {
+    switchView(`view-${initialHash}`);
   }
 
-  const isReduced = window.matchMedia(`(prefers-reduced-motion: reduce)`).matches;
-
-  const animate = () => {
-    ctx.fillStyle = 'rgba(26, 32, 44, 0.1)'; 
-    ctx.fillRect(0, 0, width, height);
-
-    const cX = width / 2;
-    const cY = height / 2;
-
-    particles.forEach(p => {
-      if (!isReduced) {
-        p.angle += p.speed;
-        p.radius -= 0.5;
-        if (p.radius < 0) {
-          p.radius = Math.max(width, height) / 1.2;
-          p.angle = Math.random() * PI2;
-        }
-        p.x = cX + Math.cos(p.angle) * p.radius;
-        p.y = cY + Math.sin(p.angle) * p.radius;
-      }
-
-      ctx.fillStyle = `rgba(0, 255, 135, ${p.opacity})`;
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.size, 0, PI2);
-      ctx.fill();
-    });
-
-    if (!isReduced) requestAnimationFrame(animate);
-  };
-
-  canvas.style.display = 'block';
-  animate();
-};
+  window.App.updateDashboard();
+});
 
 const initSessionTimer = () => {
   const sessionEl = document.getElementById('session-uptime');
@@ -307,7 +288,6 @@ const initToggles = () => {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-  initPortalParticles();
   initSessionTimer();
   initBattery();
   initToggles();

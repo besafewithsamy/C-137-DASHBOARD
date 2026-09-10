@@ -160,7 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
       let level = 'INFO';
       let color = 'var(--text-main)';
       
-      const actionLower = latestLog.action.toLowerCase();
+      const actionLower = (latestLog.action || '').toLowerCase();
       if (actionLower.includes('phishing') || actionLower.includes('incorrect') || actionLower.includes('error') || actionLower.includes('fail')) {
         level = 'WARN';
         color = 'var(--accent-yellow)';
@@ -177,7 +177,13 @@ document.addEventListener('DOMContentLoaded', () => {
       if (activeLevels.includes(level)) {
         const div = document.createElement('div');
         div.style.marginBottom = '4px';
-        div.innerHTML = `<span style="color: var(--text-muted);">${latestLog.time}</span> <strong style="color: ${color};">[${level}]</strong> ${latestLog.action}`;
+        const timeSpan = document.createElement('span');
+        timeSpan.style.color = 'var(--text-muted)';
+        timeSpan.textContent = latestLog.time;
+        const levelTag = document.createElement('strong');
+        levelTag.style.color = color;
+        levelTag.textContent = `[${level}]`;
+        div.append(timeSpan, ' ', levelTag, ' ', latestLog.action);
         
         telemetryOutput.appendChild(div);
         if (telemetryOutput.childNodes.length > 20) {

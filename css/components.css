@@ -503,7 +503,9 @@ input[type="range"]::-webkit-slider-runnable-track {
   padding: 0.4rem 0;
 }
 
-.has-dropdown:hover .dropdown-menu {
+.has-dropdown:hover .dropdown-menu,
+.has-dropdown.open .dropdown-menu,
+.has-dropdown:focus-within .dropdown-menu {
   opacity: 1;
   visibility: visible;
   transform: translateY(0);

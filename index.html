@@ -12,24 +12,21 @@
 <body>
 
   <div id="portal-bg">
-    <div class="portal-glow"></div>
-    <div class="portal-ring ring-1"></div>
-    <div class="portal-ring ring-2"></div>
     <div class="portal-grid"></div>
-    <canvas id="portal-particles"></canvas>
   </div>
 
   <div id="app-container">
     
-    <header class="top-nav-header">
+    <header class="top-nav-header" id="site-header">
+      <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="top-nav-list">☰</button>
       <div class="logo-area">
         <h2>C-137 DASHBOARD</h2>
       </div>
-      <nav class="top-nav">
-        <ul>
+      <nav class="top-nav" aria-label="Main navigation">
+        <ul id="top-nav-list">
           <li class="nav-item active" data-target="view-dashboard">OVERVIEW</li>
           <li class="has-dropdown">
-            <span>SECURITY TOOLS ▼</span>
+            <span role="button" tabindex="0" aria-haspopup="true" aria-expanded="false">SECURITY TOOLS ▼</span>
             <ul class="dropdown-menu">
               <li class="nav-item" data-target="view-password">Password Check</li>
               <li class="nav-item" data-target="view-generator">Pass Generator</li>
@@ -40,7 +37,7 @@
             </ul>
           </li>
           <li class="has-dropdown">
-            <span>NETWORK ▼</span>
+            <span role="button" tabindex="0" aria-haspopup="true" aria-expanded="false">NETWORK ▼</span>
             <ul class="dropdown-menu">
               <li class="nav-item" data-target="view-ip">IP Lookup</li>
               <li class="nav-item" data-target="view-scanner">Port Scanner</li>
@@ -51,10 +48,10 @@
           <li class="nav-item" data-target="view-about">HELP</li>
         </ul>
       </nav>
-      <div style="display: flex; align-items: center; gap: 15px;">
-        <div style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--accent-cyan); display: flex; flex-direction: column; align-items: flex-end; margin-right: 10px;">
+      <div class="header-actions">
+        <div class="sync-status">
           <span>SYNC STATUS</span>
-          <span style="color: var(--accent-green); font-weight: bold;">99.98% C-137</span>
+          <span class="sync-value">99.98% C-137</span>
         </div>
         <button id="btn-holo-toggle" class="btn btn-icon glitch-hover" title="Holo Mode" style="font-size: 1.2rem; color: var(--accent-cyan);">📺</button>
         <button id="btn-audio-toggle" class="btn btn-icon glitch-hover" title="Mute Audio" style="font-size: 1.2rem; color: var(--accent-cyan);">🔊</button>

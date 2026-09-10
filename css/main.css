@@ -106,14 +106,6 @@ ul {
   background-color: var(--bg-dark);
 }
 
-.portal-glow {
-  display: none;
-}
-
-.portal-ring {
-  display: none;
-}
-
 .portal-grid {
   position: absolute;
   bottom: -100px;
@@ -131,26 +123,6 @@ ul {
   opacity: 0.8;
   mask-image: radial-gradient(circle at bottom right, black 20%, transparent 60%);
   -webkit-mask-image: radial-gradient(circle at bottom right, black 20%, transparent 60%);
-}
-
-#portal-particles {
-  display: none;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .portal-ring, .portal-glow, #graph-line, #graph-area {
-    animation: none !important;
-  }
-}
-
-@keyframes pulse-glow {
-  0% { transform: translate(-50%, -50%) scale(0.95); opacity: 0.3; }
-  100% { transform: translate(-50%, -50%) scale(1.05); opacity: 0.5; }
-}
-
-@keyframes rotate-ring {
-  0% { transform: translate(-50%, -50%) rotate(0deg); }
-  100% { transform: translate(-50%, -50%) rotate(360deg); }
 }
 
 @keyframes drawGraph {

@@ -56,11 +56,8 @@ document.addEventListener('DOMContentLoaded', () => {
     btnMalicious.style.display = 'none';
     btnNext.style.display = 'block';
     
-    if (window.Utils && window.Utils.Storage) {
-      const logs = window.Utils.Storage.get('c137_activity') || [];
-      logs.unshift({ time: new Date().toLocaleTimeString(), action: `Phishing Sim: Scored ${isCorrect ? 'Correct' : 'Incorrect'}` });
-      window.Utils.Storage.set('c137_activity', logs);
-      document.dispatchEvent(new Event('activityLogUpdated'));
+    if (window.Utils && window.Utils.logActivity) {
+      Utils.logActivity(`Phishing Sim: Scored ${isCorrect ? 'Correct' : 'Incorrect'}`);
     }
   };
 
@@ -130,12 +127,9 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       analysisResults.style.display = 'block';
-      
-      if (window.Utils && window.Utils.Storage) {
-        const logs = window.Utils.Storage.get('c137_activity') || [];
-        logs.unshift({ time: new Date().toLocaleTimeString(), action: 'Phishing Sim: Analyzed headers' });
-        window.Utils.Storage.set('c137_activity', logs);
-        document.dispatchEvent(new Event('activityLogUpdated'));
+
+      if (window.Utils && window.Utils.logActivity) {
+        Utils.logActivity('Phishing Sim: Analyzed headers');
       }
     });
   }
