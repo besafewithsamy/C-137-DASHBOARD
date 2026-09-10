@@ -153,15 +153,6 @@ ul {
   -webkit-mask-image: radial-gradient(circle at bottom right, black 20%, transparent 60%);
 }
 
-@keyframes drawGraph {
-  to { stroke-dashoffset: 0; }
-}
-
-@keyframes fadeArea {
-  to { opacity: 0.6; }
-}
-
-
 body.scanlines::after {
   content: " ";
   display: block;

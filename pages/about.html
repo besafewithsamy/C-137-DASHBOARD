@@ -5,28 +5,36 @@
   <style>
     body {
       font-family: 'Inter', system-ui, sans-serif;
-      color: #e0e0e0;
+      color: var(--text-main, #1A202C);
       background-color: transparent;
       padding: 0;
       margin: 0;
       line-height: 1.6;
     }
-    h2 { color: #000000; text-transform: uppercase; letter-spacing: 2px; }
-    ul { padding-left: 1.5rem; color: #888; }
+    h2 {
+      color: var(--accent-purple, #2D5E5B);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-size: 1rem;
+    }
+    ul { padding-left: 1.25rem; color: var(--text-muted, #4A5568); }
     li { margin-bottom: 0.5rem; }
-    strong { color: #0c0b0c; }
+    strong { color: var(--text-main, #1A202C); }
   </style>
 </head>
 <body>
   <h2>C-137 Modules</h2>
   <ul>
-    <li><strong>Password Checker:</strong> Quick entropy check.</li>
-    <li><strong>Password Generator:</strong> Uses WebCrypto for secure random generation.</li>
-    <li><strong>Hash Generator:</strong> Standard hashes via WebCrypto.</li>
-    <li><strong>Encoder/Decoder:</strong> Handles Base64 with UTF-8 support.</li>
-    <li><strong>Network Tools:</strong> Simple IP/Domain lookup.</li>
-    <li><strong>Scanner:</strong> Fake port scanner demo.</li>
-    <li><strong>Terminal:</strong> Basic CLI for navigating the UI.</li>
+    <li><strong>Password Checker:</strong> Entropy scoring, crack-time estimate, weak-pattern detection.</li>
+    <li><strong>Password Generator:</strong> Crypto-secure random generation with guaranteed character sets.</li>
+    <li><strong>Hash Generator:</strong> SHA-256 / SHA-384 / SHA-512 via WebCrypto.</li>
+    <li><strong>Encoder/Decoder:</strong> Base64 with full UTF-8 support.</li>
+    <li><strong>File Identifier:</strong> Magic-byte analysis, entropy, and extension-spoof detection.</li>
+    <li><strong>Phishing Simulator:</strong> Interactive scenarios plus a header & red-flag analyzer.</li>
+    <li><strong>Network Lookup:</strong> Validated IP/domain lookup with timeout handling.</li>
+    <li><strong>Port Scanner:</strong> Cancellable scan simulation with live progress and summary.</li>
+    <li><strong>Terminal:</strong> CLI with command history, Tab completion, and tool navigation.</li>
+    <li><strong>Command Palette:</strong> Ctrl+K to jump to any tool instantly.</li>
   </ul>
 </body>
 </html>
