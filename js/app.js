@@ -108,11 +108,19 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!activityList) return;
       const logs = Utils.Storage.get('c137_activity') || [];
 
-      activityList.innerHTML = logs.length === 0
-        ? '<div class="activity-item text-muted">No reality distortions detected yet.</div>'
-        : '';
+      activityList.innerHTML = '';
 
-      logs.slice(0, 10).forEach(log => {
+      const logCount = document.getElementById('log-count');
+      if (logCount) logCount.textContent = `${logs.length} ${logs.length === 1 ? 'entry' : 'entries'}`;
+
+      if (logs.length === 0) {
+        const empty = document.createElement('div');
+        empty.className = 'activity-item text-muted';
+        empty.textContent = 'No reality distortions detected yet.';
+        activityList.appendChild(empty);
+      }
+
+      logs.forEach(log => {
         const div = document.createElement('div');
         div.className = 'activity-item';
         const timeSpan = document.createElement('span');
@@ -131,18 +139,29 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
+  const btnClearLogs = document.getElementById('btn-clear-logs');
+  if (btnClearLogs) {
+    btnClearLogs.addEventListener('click', () => {
+      Utils.Storage.set('c137_activity', []);
+      document.dispatchEvent(new Event('activityLogUpdated'));
+      if (window.Utils) Utils.showToast('Activity log cleared.', 'success');
+    });
+  }
+
   document.addEventListener('activityLogUpdated', window.App.updateDashboard);
 
   const searchableTools = [
-    { name: 'Main Console & Terminal', target: 'view-dashboard' },
+    { name: 'Main Console', target: 'view-dashboard' },
     { name: 'Password Checker', target: 'view-password' },
     { name: 'Password Generator', target: 'view-generator' },
     { name: 'Hash Generator', target: 'view-hash' },
     { name: 'Base64 Encoder/Decoder', target: 'view-encoding' },
     { name: 'File Identifier', target: 'view-magic' },
     { name: 'Phishing Simulator', target: 'view-phishing' },
-    { name: 'Network Tools (IP)', target: 'view-ip' },
+    { name: 'IP Lookup', target: 'view-ip' },
     { name: 'Port Scanner', target: 'view-scanner' },
+    { name: 'Terminal', target: 'view-terminal' },
+    { name: 'Activity Logs', target: 'view-logs' },
     { name: 'Diagnostics', target: 'view-about' }
   ];
 
@@ -215,6 +234,11 @@ document.addEventListener('DOMContentLoaded', () => {
     cmdOverlay.addEventListener('click', e => {
       if (e.target === cmdOverlay) closeCommandPalette();
     });
+  }
+
+  const cmdHint = document.getElementById('cmd-hint');
+  if (cmdHint) {
+    cmdHint.addEventListener('click', openCommandPalette);
   }
 
   document.addEventListener('keydown', e => {

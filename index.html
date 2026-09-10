@@ -52,6 +52,7 @@
         </ul>
       </nav>
       <div class="header-actions">
+        <button id="cmd-hint" class="cmd-hint" title="Open command palette">Ctrl K</button>
         <div class="sync-status">
           <span>SYNC STATUS</span>
           <span class="sync-value">99.98% C-137</span>
@@ -179,7 +180,7 @@
               <div id="terminal-output" class="terminal-output"></div>
               <div class="terminal-input-line">
                 <span class="terminal-prompt-prefix">rick@c137:~$</span>
-                <input type="text" id="terminal-input" autocomplete="off" spellcheck="false" autofocus>
+                <input type="text" id="terminal-input" name="terminal-command" role="combobox" aria-label="Terminal command input" autocomplete="off" autocapitalize="off" spellcheck="false" autofocus>
               </div>
             </div>
           </div>
@@ -189,7 +190,13 @@
       <section id="view-logs" class="view-section">
         <div class="view-container">
           <div class="card">
-            <h3 class="card-title">ACTIVITY LOG</h3>
+            <div class="flex-row justify-between" style="margin-bottom: 1.5rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.75rem;">
+              <h3 class="card-title" style="margin-bottom: 0; border-bottom: none; padding-bottom: 0;">ACTIVITY LOG</h3>
+              <div class="flex-row gap-1">
+                <span id="log-count" class="text-muted" style="font-family: var(--font-mono); font-size: 0.85rem;">0 entries</span>
+                <button id="btn-clear-logs" class="btn text-error" style="padding: 0.35rem 0.9rem; font-size: 0.75rem;">CLEAR</button>
+              </div>
+            </div>
             <div id="activity-list" class="activity-list">
             </div>
           </div>
@@ -205,12 +212,26 @@
           <div class="card" style="margin: 0 auto; width: 100%; max-width: 600px;">
             <div class="input-group">
               <label for="chk-password-input">Target Password</label>
-              <input type="password" id="chk-password-input" placeholder="Enter password...">
+              <div class="integrated-input">
+                <input type="password" id="chk-password-input" name="password-check" autocomplete="new-password" placeholder="Enter password...">
+                <button id="btn-chk-toggle" class="btn-icon" title="Show password" aria-label="Show password">👁</button>
+              </div>
             </div>
             <div class="progress-container">
               <div id="chk-progress" class="progress-bar"></div>
             </div>
             <p id="chk-strength-text" class="text-muted" style="margin-top: 1.5rem; font-family: var(--font-mono); font-weight: bold; text-align: center; font-size: 1.2rem;">WAITING FOR INPUT</p>
+            <div id="chk-details" style="display: none; font-family: var(--font-mono); font-size: 0.8rem;">
+              <div class="flex-row justify-between" style="padding: 0.5rem 0; border-bottom: 1px dashed var(--border-color);">
+                <span class="text-muted">ENTROPY</span>
+                <span id="chk-entropy">-</span>
+              </div>
+              <div class="flex-row justify-between" style="padding: 0.5rem 0; border-bottom: 1px dashed var(--border-color);">
+                <span class="text-muted">EST. CRACK TIME</span>
+                <span id="chk-crack-time">-</span>
+              </div>
+              <div id="chk-warnings" class="flex-col" style="gap: 0.4rem; padding-top: 0.75rem; color: var(--accent-yellow);"></div>
+            </div>
             <div style="margin-top: 2rem; padding-top: 1rem; border-top: 1px dashed var(--border-color);">
               <p class="text-muted" style="font-size: 0.8rem; text-align: center;"><i>Data processed in this dimension only. No network requests made.</i></p>
             </div>
@@ -227,7 +248,8 @@
           <div class="card" style="margin: 0 auto; width: 100%; max-width: 600px;">
             <div class="input-group">
               <label>Output</label>
-              <div class="integrated-input"><input type="text" id="gen-output" readonly style="color: var(--accent-green); font-size: 1.1rem; text-align: center;"><button id="btn-copy-gen" class="btn-icon">📋</button></div>
+              <div class="integrated-input"><input type="text" id="gen-output" name="generated-password" readonly autocomplete="off" style="color: var(--accent-green); font-size: 1.1rem; text-align: center;"><button id="btn-copy-gen" class="btn-icon">📋</button></div>
+              <p class="text-muted" style="font-size: 0.8rem; margin: 0.5rem 0 0; text-align: right;">Entropy: <span id="gen-entropy" class="text-cyan" style="font-weight: bold;">-</span></p>
             </div>
             
             <div class="input-group" style="margin-top: 2rem;">
@@ -350,7 +372,13 @@
                 <input type="text" id="scan-ports" placeholder="e.g. 1-100" value="1-100">
               </div>
             </div>
-            <button id="btn-scan" class="btn btn-primary btn-block">START SCAN</button>
+            <div class="flex-row gap-1">
+              <button id="btn-scan" class="btn btn-primary btn-block">START SCAN</button>
+              <button id="btn-scan-cancel" class="btn text-error btn-block" style="display: none;">CANCEL</button>
+            </div>
+            <div class="progress-container" id="scan-progress-container" style="display: none;">
+              <div id="scan-progress" class="progress-bar"></div>
+            </div>
 
             <div style="margin-top: 2rem;">
               <label class="text-cyan" style="font-size: 0.85rem; font-family: var(--font-mono);">Output</label>

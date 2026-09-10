@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const genNumbers = document.getElementById('gen-numbers');
   const genSymbols = document.getElementById('gen-symbols');
   const genOutput = document.getElementById('gen-output');
+  const genEntropy = document.getElementById('gen-entropy');
   const btnGenerate = document.getElementById('btn-generate');
   const btnCopyGen = document.getElementById('btn-copy-gen');
 
@@ -18,48 +19,77 @@ document.addEventListener('DOMContentLoaded', () => {
     symbols: '!@#$%^&*()_+-=[]{}|;:,.<>?'
   };
 
-  genLength.addEventListener('input', e => {
-    genLengthVal.textContent = e.target.value;
-  });
+  const selectedSets = () => {
+    const active = [];
+    if (genUppercase.checked) active.push(charSets.uppercase);
+    if (genLowercase.checked) active.push(charSets.lowercase);
+    if (genNumbers.checked) active.push(charSets.numbers);
+    if (genSymbols.checked) active.push(charSets.symbols);
+    return active;
+  };
+
+  const randomInt = (maxExclusive) => {
+    if (window.crypto && window.crypto.getRandomValues) {
+      const buf = new Uint32Array(1);
+      window.crypto.getRandomValues(buf);
+      return buf[0] % maxExclusive;
+    }
+    return Math.floor(Math.random() * maxExclusive);
+  };
+
+  const secureShuffle = (arr) => {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = randomInt(i + 1);
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  };
 
   const generatePassword = () => {
-    let availableChars = '';
-    if (genUppercase.checked) availableChars += charSets.uppercase;
-    if (genLowercase.checked) availableChars += charSets.lowercase;
-    if (genNumbers.checked) availableChars += charSets.numbers;
-    if (genSymbols.checked) availableChars += charSets.symbols;
+    const sets = selectedSets();
 
-    if (!availableChars) {
+    if (sets.length === 0) {
       if (window.Utils) Utils.showToast('Select at least one character type.', 'error');
       return;
     }
 
     const length = parseInt(genLength.value, 10) || 16;
-    let password = '';
+    const availableChars = sets.join('');
+    const chars = [];
 
-    if (window.crypto && window.crypto.getRandomValues) {
-      const randomValues = new Uint32Array(length);
-      window.crypto.getRandomValues(randomValues);
-      for (let i = 0; i < length; i++) {
-        password += availableChars[randomValues[i] % availableChars.length];
-      }
-    } else {
-      for (let i = 0; i < length; i++) {
-        password += availableChars[Math.floor(Math.random() * availableChars.length)];
-      }
+    // Guarantee at least one char from each selected set
+    sets.forEach(set => chars.push(set[randomInt(set.length)]));
+
+    while (chars.length < length) {
+      chars.push(availableChars[randomInt(availableChars.length)]);
     }
 
+    secureShuffle(chars);
+    const password = chars.join('');
+
     genOutput.value = password;
+
+    if (genEntropy) {
+      const bits = Math.round(length * Math.log2(availableChars.length) * 10) / 10;
+      genEntropy.textContent = `${bits} bits`;
+    }
+
     if (window.Utils) Utils.logActivity('Generated new password');
   };
 
+  genLength.addEventListener('input', e => {
+    genLengthVal.textContent = e.target.value;
+  });
+
+  [genUppercase, genLowercase, genNumbers, genSymbols].forEach(cb => {
+    if (cb) cb.addEventListener('change', generatePassword);
+  });
+
   btnGenerate.addEventListener('click', generatePassword);
-  
+
   btnCopyGen.addEventListener('click', () => {
     if (genOutput.value && window.Utils) {
       Utils.copyToClipboard(genOutput.value);
     }
   });
-
-  generatePassword();
 });

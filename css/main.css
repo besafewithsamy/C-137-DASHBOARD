@@ -83,6 +83,34 @@ ul {
 
 .hidden { display: none !important; }
 
+:focus-visible {
+  outline: 2px solid var(--accent-cyan);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .glitch-hover:hover,
+  .card-title:hover,
+  .section-title:hover {
+    animation: none !important;
+  }
+  .card,
+  .btn,
+  .nav-item,
+  .has-dropdown,
+  .dropdown-menu {
+    transition: none !important;
+  }
+}
+
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;

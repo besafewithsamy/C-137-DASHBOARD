@@ -151,6 +151,33 @@
   flex-direction: column;
 }
 
+.cmd-hint {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  background: var(--bg-input);
+  padding: 0.35rem 0.75rem;
+  border-radius: 20px;
+  border: 1px solid var(--border-color);
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.cmd-hint::before {
+  content: '⚡';
+  color: var(--accent-yellow);
+}
+
+.cmd-hint:hover {
+  border-color: var(--accent-cyan);
+  color: var(--accent-cyan);
+  box-shadow: 0 0 10px var(--accent-cyan-dim);
+}
+
 .view-section {
   padding: 2rem;
   display: none;
@@ -199,6 +226,10 @@
 
 @media (max-width: 1024px) {
   .sync-status { display: none; }
+}
+
+@media (max-width: 1200px) {
+  .cmd-hint { display: none; }
 }
 
 @media (max-width: 900px) {
