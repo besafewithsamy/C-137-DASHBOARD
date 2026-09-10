@@ -14,6 +14,29 @@
   transform: translateY(-2px);
 }
 
+.score-badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.score-optimal {
+  background: var(--accent-green-dim);
+  color: var(--accent-green);
+}
+
+.score-warn {
+  background: rgba(246, 173, 85, 0.15);
+  color: var(--accent-yellow);
+}
+
+.score-crit {
+  background: rgba(229, 62, 62, 0.12);
+  color: var(--error);
+}
+
 .card-title {
   font-family: var(--font-mono);
   font-size: 0.95rem;

@@ -5,27 +5,29 @@ document.addEventListener('DOMContentLoaded', () => {
   if (!terminalInput || !terminalOutput) return;
 
   const asciiLogo = `
-<pre style="font-family: monospace; line-height: 1.2;">
    _____          __  ____   _____ 
   / ____|        / | |___ \\ |___  |
  | |       ____  | |   __) |   / / 
  | |      |____| | |  |__ <   / /  
  | |____         | |  ___) | / /   
   \\_____|        |_| |____/ /_/    
-                                   
-</pre>
-  `;
+                                    
+`;
 
   const printLine = (text, className = '') => {
     const div = document.createElement('div');
     div.className = `terminal-line ${className}`;
-    
+
     if (className.includes('neofetch')) {
-      div.innerHTML = text;
+      const pre = document.createElement('pre');
+      pre.style.fontFamily = 'monospace';
+      pre.style.lineHeight = '1.2';
+      pre.textContent = text;
+      div.appendChild(pre);
     } else {
       div.textContent = text;
     }
-    
+
     terminalOutput.appendChild(div);
     terminalOutput.scrollTop = terminalOutput.scrollHeight;
   };

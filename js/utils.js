@@ -27,12 +27,35 @@ const Utils = {
   },
 
   copyToClipboard: async (text) => {
+    let copied = false;
     try {
-      await navigator.clipboard.writeText(text);
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(text);
+        copied = true;
+      } else {
+        throw new Error('clipboard API unavailable');
+      }
+    } catch (err) {
+      try {
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        textarea.setAttribute('readonly', '');
+        document.body.appendChild(textarea);
+        textarea.select();
+        copied = document.execCommand('copy');
+        document.body.removeChild(textarea);
+      } catch (fallbackErr) {
+        copied = false;
+      }
+    }
+
+    if (copied) {
       Utils.showToast('Copied to clipboard.', 'success');
       Utils.logActivity('Copied data to clipboard');
-    } catch (err) {
-      Utils.showToast('Failed to copy', 'error');
+    } else {
+      Utils.showToast('Copy failed. Select the text and copy manually.', 'error');
     }
   },
 
