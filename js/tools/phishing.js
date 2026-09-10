@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const isCorrect = guessIsPhishing === s.isPhishing;
     
     feedback.style.display = 'block';
-    feedback.innerHTML = \`<p style="color: \${isCorrect ? 'var(--accent-green)' : 'var(--error)'}; font-weight: bold; margin-top: 0; margin-bottom: 0.5rem;">\${isCorrect ? 'CORRECT' : 'INCORRECT'}</p><p style="margin: 0;">\${s.explanation}</p>\`;
+    feedback.innerHTML = `<p style="color: ${isCorrect ? 'var(--accent-green)' : 'var(--error)'}; font-weight: bold; margin-top: 0; margin-bottom: 0.5rem;">${isCorrect ? 'CORRECT' : 'INCORRECT'}</p><p style="margin: 0;">${s.explanation}</p>`;
     
     btnLegit.style.display = 'none';
     btnMalicious.style.display = 'none';
@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     if (window.Utils && window.Utils.Storage) {
       const logs = window.Utils.Storage.get('c137_activity') || [];
-      logs.unshift({ time: new Date().toLocaleTimeString(), action: \`Phishing Sim: Scored \${isCorrect ? 'Correct' : 'Incorrect'}\` });
+      logs.unshift({ time: new Date().toLocaleTimeString(), action: `Phishing Sim: Scored ${isCorrect ? 'Correct' : 'Incorrect'}` });
       window.Utils.Storage.set('c137_activity', logs);
       document.dispatchEvent(new Event('activityLogUpdated'));
     }
@@ -101,15 +101,32 @@ document.addEventListener('DOMContentLoaded', () => {
         if (r.regex.test(text)) {
           issues++;
           const li = document.createElement('li');
-          li.innerHTML = \`<span style="color: var(--error);">[!]</span> \${r.msg}\`;
+          li.innerHTML = `<span style="color: var(--error); font-weight: bold;">[!]</span> <span>${r.msg}</span>`;
           findingsList.appendChild(li);
         }
       });
 
+      const badgeColor = issues === 0 ? 'var(--accent-green)' : (issues < 3 ? 'var(--accent-yellow)' : 'var(--error)');
+      const badgeText = issues === 0 ? 'LOW RISK' : (issues < 3 ? 'SUSPICIOUS' : 'CRITICAL PHISHING RISK');
+      const badgeLabel = `<span style="background-color: ${badgeColor}; color: var(--bg-dark); padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 0.9rem;">${badgeText}</span>`;
+      
+      const headerItem = document.createElement('li');
+      headerItem.style.marginBottom = '1rem';
+      headerItem.innerHTML = badgeLabel;
+      findingsList.insertBefore(headerItem, findingsList.firstChild);
+
       if (issues === 0) {
         const li = document.createElement('li');
-        li.innerHTML = \`<span style="color: var(--accent-green);">[✓]</span> No obvious static indicators found. Continue manual review.\`;
+        li.innerHTML = `<span style="color: var(--accent-green); font-weight: bold;">[✓]</span> <span>No obvious static indicators found. Continue manual review.</span>`;
         findingsList.appendChild(li);
+      } else {
+        const edu = document.createElement('li');
+        edu.style.marginTop = '1rem';
+        edu.style.padding = '0.5rem';
+        edu.style.background = 'rgba(255,255,255,0.05)';
+        edu.style.borderLeft = `3px solid ${badgeColor}`;
+        edu.innerHTML = `<strong>SAFETY TIP:</strong> Always verify the sender domain independently and do not click suspicious links. Detected ${issues} indicator(s).`;
+        findingsList.appendChild(edu);
       }
 
       analysisResults.style.display = 'block';
