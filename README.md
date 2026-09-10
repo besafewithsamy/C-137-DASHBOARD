@@ -1,6 +1,6 @@
 # C-137 Dashboard
 
-A browser-based cybersecurity toolkit with a Rick and Morty-inspired interface. No backend, no frameworks, no build step. Everything runs locally using native browser APIs — including the dashboard chart, which is rendered by a small built-in canvas engine (no external libraries at all).
+A browser-based cybersecurity toolkit with a Rick and Morty-inspired interface. No backend, no frameworks, no build step. Everything runs locally using native browser APIs including the dashboard chart, which is rendered by a small built-in canvas engine (no external libraries at all).
 
 This started as a redesign of an older project called C-137. The goal was to keep it genuinely useful while giving it a visual identity that actually makes it interesting to open.
 
@@ -42,7 +42,7 @@ The dashboard gives you a set of small, self-contained security tools that you c
 
 - HTML5, CSS3, Vanilla JavaScript (ES6+)
 - Web Crypto API for hashing and secure password generation
-- Custom canvas chart engine (`js/chart.js`) — zero JavaScript dependencies
+- Custom canvas chart engine (`js/chart.js`)  zero JavaScript dependencies
 - LocalStorage for activity logging and session state
 - Fetch API (with timeout + input validation) for the network lookup tool only
 - No build step, no npm, no external scripts or CDNs
@@ -92,7 +92,7 @@ C-137/
 
 ## Privacy
 
-There is no server, no analytics, no tracking, and no third-party scripts. The only outbound requests the app can ever make are from the IP/domain lookup tool, which contacts a public DNS and geolocation API only when you explicitly click the lookup button. Everything else — hashing, generation, file analysis, phishing analysis, the chart, the terminal — is entirely local.
+There is no server, no analytics, no tracking, and no third-party scripts. The only outbound requests the app can ever make are from the IP/domain lookup tool, which contacts a public DNS and geolocation API only when you explicitly click the lookup button. Everything else  hashing, generation, file analysis, phishing analysis, the chart, the terminal  is entirely local.
 
 ## Accessibility
 
